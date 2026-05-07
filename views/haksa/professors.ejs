@@ -14,13 +14,31 @@
                 <td>{{FDATE}}</td>
                 <td>{{TITLE}}</td>
                 <td>{{FSALARY}}</td>
+                <td><button pcode="{{PCODE}}" class="btn btn-outline-danger btn-sm delete">delete</button></td>
             </tr>
             {{/each}}
         </tbody>
     </script>
 </div>
 <script>
-    getList();
+    $("#tbl").on("click", ".delete", function(){
+        const pcode = $(this).attr("pcode");
+        if(confirm(`${pcode}번 교수를 삭제하시겠습니까?`)){
+            $.ajax({
+                type: "post",
+                url: "/haksa/pro/delete",
+                data: {pcode},
+                success:function(){
+                    alert(`${pcode}번 교수를 삭제했습니다.`);
+                    location.href="/haksa/pro";
+                },
+                error: function(){
+                    alert(`${pcode}번 교수 삭제에 실패했습니다.`);
+                }
+            })
+        }
+    });
+    
     function getList(){
         $.ajax({
             type: "get",
@@ -32,4 +50,6 @@
             }
         });
     }
+
+    getList();
 </script>

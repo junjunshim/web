@@ -70,6 +70,23 @@ router.post('/pro/insert', async function(req, res){
 
 });
 
+// 학사관리의 교수 삭제 라우터(post)
+router.post('/pro/delete', async function (req, res) {
+   const pcode = req.body.pcode;
+   var con;
+   
+   try{
+    con = await getConnection();
+    const sql = 'delete from professors where pcode=:pcode';
+    await con.execute(sql, {pcode}, {autoCommit:true});
+    res.sendStatus(200);
+   }catch(err){
+    res.sendStatus(500)
+   }finally{;
+    if(con) await con.close();
+   }
+});
+
 // 학사관리의 학생 라우터
 router.get('/stu', function(req, res, next){
     res.render('index', {title: '학생관리', pageName: 'haksa/students.ejs'})
