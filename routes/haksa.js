@@ -13,7 +13,7 @@ router.get('/pro/list.json', async function(req, res, next){
     var con;
     try{
         con = await getConnection();
-        const sql="select p.*, to_char(p.hiredate, 'YYYY-MM-DD') fdate, to_char(salary, '99,999,999') fsalary from professors p";
+        const sql="select p.*, to_char(p.hiredate, 'YYYY-MM-DD') fdate, to_char(salary, '99,999,999') fsalary from professors p order by pcode desc";
         const result = await con.execute(sql, {}, {outFormat:oracledb.OUT_FORMAT_OBJECT});
         res.send(result.rows);
     }catch(err){
@@ -21,9 +21,9 @@ router.get('/pro/list.json', async function(req, res, next){
     }finally{
         if(con) await con.close();
     }
-});
+}); 
 
-// 학사관리의 교수 등록 라우터
+// 학사관리의 교수 등록 라우터(get)
 router.get('/pro/insert', async function(req, res, next){
     var con;
     var code;
@@ -39,6 +39,35 @@ router.get('/pro/insert', async function(req, res, next){
         if(con) await con.close();
     }
     res.render('index', {title: '교수등록', pageName: 'haksa/professors_insert', code})
+});
+// 학사관리의 교수 등록 라우터(post)
+router.post('/pro/insert', async function(req, res){
+    const pcode = req.body.pcode;
+    const pname = req.body.pname;
+    const dept = req.body.dept;
+    const title = req.body.title;
+    const hiredate = req.body.hiredate;
+    const salary = req.body.salary;
+
+    console.log(pcode, pname, dept, title, hiredate, salary);
+
+    var con;
+
+    try{
+        con = await getConnection();
+        
+        const sql = `insert into professors(pcode, pname, dept, hiredate, title, salary) values('${pcode}', '${pname}', '${dept}', '${hiredate}', '${title}', ${salary})`;
+        
+        await con.execute(sql, {}, {autoCommit:true});
+        
+        res.sendStatus(200);
+    }catch(err){
+        console.log(err);
+        res.sendStatus(500);
+    }finally{
+        if(con) await con.close();
+    }
+
 });
 
 // 학사관리의 학생 라우터
