@@ -111,6 +111,29 @@ router.get('/stu/list.json', async function (req, res) {
     }
 });
 
+// 학사관리의 학생 등록 라우터
+router.get('/stu/insert', async function(req, res){
+    var con;
+    var code;
+
+    try{
+        con = await getConnection();
+
+        const sql = "select max(scode) + 1 from students";
+
+        const result = await con.execute(sql);
+
+        code = result.rows[0][0];
+        console.log(code);
+    }catch(err){
+
+    }finally{
+        if(con) await con.close(); 
+    }
+    
+    res.render('index', {title: '학생입력', pageName: 'haksa/students_insert.ejs', code});
+});
+
 // 학사관리의 강좌 라우터
 router.get('/cou', function(req, res, next){
     res.render('index', {title: '강좌관리', pageName: 'haksa/courses.ejs'})
