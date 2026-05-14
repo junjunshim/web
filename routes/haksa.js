@@ -167,6 +167,30 @@ router.post('/stu/insert', async function (req, res) {
     }
 });
 
+// 학사관리의 학새 삭제 라우터
+router.post('/stu/delete', async function (req, res) {
+    var con;
+
+    const scode = req.body.scode;
+
+    try{
+        con = await getConnection();
+
+        const sql = `delete from students where scode=${scode}`;
+
+        console.log(sql);
+
+        await con.execute(sql, {}, {autoCommit:true});
+
+        res.sendStatus(200);
+    }catch(err){
+        res.sendStatus(500);
+        console.log(err);
+    }finally{
+        if(con) await con.close();
+    }
+})
+
 // 학사관리의 강좌 라우터
 router.get('/cou', function(req, res, next){
     res.render('index', {title: '강좌관리', pageName: 'haksa/courses.ejs'})

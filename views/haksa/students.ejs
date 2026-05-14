@@ -33,4 +33,22 @@
             }
         });
     }
+
+    $("#tbl").on("click", ".delete", function(){
+        const scode=$(this).attr("scode");
+        if(confirm(scode + "번 학생를 정말로 삭제하실래요?")){
+            $.ajax({
+                type:"post",
+                url:"/haksa/stu/delete",
+                data:{scode},
+                success:function(data){
+                    alert('삭제완료!');
+                    location.href='/haksa/stu';
+                },
+                error:function(){
+                    alert('삭제실패!');
+                }
+            });
+        }
+    });
 </script>
