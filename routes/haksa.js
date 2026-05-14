@@ -92,6 +92,25 @@ router.get('/stu', function(req, res, next){
     res.render('index', {title: '학생관리', pageName: 'haksa/students.ejs'})
 });
 
+// 학사관리의 학생 조회 라우터
+router.get('/stu/list.json', async function (req, res) {
+    var con; 
+   
+    try{
+        con = await getConnection();
+
+        const sql = "select * from view_students order by dept";
+
+        const result = await con.execute(sql, {}, {outFormat:oracledb.OUT_FORMAT_OBJECT});
+
+        res.send(result.rows);
+    }catch(err){
+    
+    }finally{
+        if(con) await con.close();
+    }
+});
+
 // 학사관리의 강좌 라우터
 router.get('/cou', function(req, res, next){
     res.render('index', {title: '강좌관리', pageName: 'haksa/courses.ejs'})
