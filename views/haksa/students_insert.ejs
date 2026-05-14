@@ -6,6 +6,10 @@
                 <span class="input-group-text">학생번호</span>
                 <input name="scode" class="form-control" disabled value="<%=code%>">
             </div>
+             <div class="input-group mb-2">
+                <span class="input-group-text">학생이름</span>
+                <input name="sname" class="form-control">
+            </div>
             <div class="input-group mb-2">
                 <span class="input-group-text">학생학과</span>
                 <select name="dept" class="form-select">
@@ -37,3 +41,29 @@
         </form>
     </div>
 </div>
+
+<script>
+    $(frm).on("submit", function(e){
+        e.preventDefault();
+        const scode=$(frm.scode).val();
+        const sname=$(frm.sname).val();
+        const dept=$(frm.dept).val();
+        const birthday=$(frm.birthday).val();
+        const year=$(frm.year).val();
+        const pcode=$(frm.pcode).val();
+        if(sname==""){
+            alert("학생이름을 입력하세요!");
+        }else{
+            if(!confirm("학생등록을 정말로 하실래요?")) return;
+            $.ajax({
+                type:"post",
+                url:"/haksa/stu/insert",
+                data:{scode, sname, dept, birthday, year, pcode},
+                success:function(){
+                    alert("학생등록을 완료했습니다.");
+                    location.href="/haksa/stu";
+                }
+            });
+        }
+    });
+</script>

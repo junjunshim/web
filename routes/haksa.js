@@ -111,7 +111,7 @@ router.get('/stu/list.json', async function (req, res) {
     }
 });
 
-// 학사관리의 학생 등록 라우터
+// 학사관리의 학생 등록 라우터(get)
 router.get('/stu/insert', async function(req, res){
     var con;
     var code;
@@ -132,6 +132,39 @@ router.get('/stu/insert', async function(req, res){
     }
     
     res.render('index', {title: '학생입력', pageName: 'haksa/students_insert.ejs', code});
+});
+
+// 학사관리의 학생 등록 라우터(post)
+router.post('/stu/insert', async function (req, res) {
+    const scode=req.body.scode;
+    const sname=req.body.sname;
+    const dept=req.body.dept;
+    const birthday=req.body.birthday;
+    const year=req.body.year;
+    const pcode=req.body.pcode;
+
+    console.log(scode, sname, dept, birthday, year, pcode);
+
+    var con;
+
+    try{
+        con = await getConnection();
+
+        sql = 
+        "insert into students(scode, sname, dept, birthday, year, advisor)"
+        +
+        " values(:scode, :sname, :dept, to_date(:birthday, 'YYYY-MM-DD'), :year, :pcode)";
+
+        console.log(sql);
+
+        await con.execute(sql, {scode, sname, dept, birthday, year, pcode}, {autoCommit:true});
+
+        res.sendStatus(200);
+    }catch(err){
+
+    }finally{
+        if(con) await con.close();
+    }
 });
 
 // 학사관리의 강좌 라우터
