@@ -4,9 +4,16 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// 디폴트 페이지 라우터
 var indexRouter = require('./routes/index');
+
+// 유저 관련 라우터
 var usersRouter = require('./routes/users');
-var haksaRouter = require('./routes/haksa')
+
+// 학사 관련 라우터
+var studentsRouter = require('./routes/haksa/students');
+var professorsRouter = require('./routes/haksa/professors');
+var coursesRouter = require('./routes/haksa/courses');
 
 var app = express();
 
@@ -20,9 +27,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 라우터 경로 지정
+// 디폴트 경로
 app.use('/', indexRouter);
+
+// 유저 관련 경로
 app.use('/users', usersRouter);
-app.use('/haksa', haksaRouter);
+
+// 학사 관련 경로
+app.use('/haksa/stu', studentsRouter);
+app.use('/haksa/pro', professorsRouter);
+app.use('/haksa/cou', coursesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
