@@ -83,7 +83,7 @@ router.post('/insert', async function (req, res) {
     }
 });
 
-// 학사관리의 학새 삭제 라우터
+// 학사관리의 학생 삭제 라우터
 router.post('/delete', async function (req, res) {
     var con;
 
