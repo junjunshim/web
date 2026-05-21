@@ -10,6 +10,9 @@ var indexRouter = require('./routes/index');
 // 유저 관련 라우터
 var usersRouter = require('./routes/users');
 
+// 게시글 관련 라우터
+var postsRouter = require("./routes/posts");
+
 // 학사 관련 라우터
 var studentsRouter = require('./routes/haksa/students');
 var professorsRouter = require('./routes/haksa/professors');
@@ -33,6 +36,9 @@ app.use('/', indexRouter);
 
 // 유저 관련 경로
 app.use('/users', usersRouter);
+
+// 게시글 관련 경로
+app.use('/posts', postsRouter);
 
 // 학사 관련 경로
 app.use('/haksa/stu', studentsRouter);
