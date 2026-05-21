@@ -7,8 +7,8 @@
                 </div>
                 <div class="card-body">
                     <form name="frm" method="post">
-                        <input value="92414029" name="scode" type="text" class="form-control mb-2" placeholder="학생번호">
-                        <input value="1234" name="pass" type="password" class="form-control mb-2" placeholder="비밀번호">
+                        <input name="scode" type="text" class="form-control mb-2" placeholder="학생번호">
+                        <input name="pass" type="password" class="form-control mb-2" placeholder="비밀번호">
                         <button type="submit" class="btn btn-primary w-100">로그인</button>
                     </form>
                 </div>
@@ -32,29 +32,28 @@
         else if(pass == ""){
             alert("비밀번호를 입력하세요!");
             $(frm.pass).focus();
+        }else{
+            // 로그인 체크
+            $.ajax({
+                type:"post",
+                url:"/users/login",
+                data:{scode, pass},
+                success:function(data){
+                    if(!data){
+                        alert("존재하지 않는 학번입니다.");
+                        $(frm.scode).focus();
+                    }
+                    else if(data.PASS != pass){
+                        alert("비밀번호가 틀렸습니다.");
+                        $(frm.pass).focus();
+                    }
+                    else{
+                        sessionStorage.setItem("sname", data.SNAME);
+                        sessionStorage.setItem("scode", data.SCODE);
+                        location.href="/";
+                    }
+                }
+            })
         }
-
-        // 로그인 체크
-        $.ajax({
-            type:"post",
-            url:"/users/login",
-            data:{scode, pass},
-            success:function(data){
-                //console.log(data);
-                if(!data){
-                    alert("존재하지 않는 학번입니다.");
-                    $(frm.scode).focus();
-                }
-                else if(data.PASS != pass){
-                    alert("비밀번호가 틀렸습니다.");
-                    $(frm.pass).focus();
-                }
-                else{
-                    sessionStorage.setItem("sname", data.SNAME);
-                    sessionStorage.setItem("scode", data.SCODE);
-                    location.href="/";
-                }
-            }
-        })
     })
 </script>
