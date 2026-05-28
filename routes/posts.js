@@ -131,4 +131,20 @@ router.get('/update/:id', async function(req, res) {
     }
 });
 
+// 게시글 수저
+router.post('/update', async function(req, res){
+    const id=req.body.id;
+    const title=req.body.title;
+    const content=req.body.content;
+    console.log(id, title, content);
+    try{
+        con = await getConnection();
+        let sql="update posts set title=:title, content=:content where id=:id";
+        await con.execute(sql, {id, title, content}, {autoCommit:true});
+        res.sendStatus(200);
+    }catch(err){
+        console.log('글수정', err.message);
+    }
+});
+
 module.exports = router;

@@ -13,3 +13,23 @@
         </div>
     </div>
 </div>
+<script>
+    const id="<%=post.ID%>";
+
+    $(frm).on("submit", function(e){
+        e.preventDefault();
+        const title = $(frm.title).val();
+        const content = $(frm.content).val();
+        console.log(id, title, content);
+        if(confirm(`${id}번 게시글을 수정하실래요?`)){
+            $.ajax({
+                type:"post",
+                url:"/posts/update",
+                data:{id, title, content},
+                success:function(){
+                    location.href=`/posts/${id}`;
+                }
+            })
+        }
+    })
+</script>
