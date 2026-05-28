@@ -42,4 +42,26 @@ router.get('/insert', function(req, res, next){
     res.render('index', {title:'글쓰기', pageName:'posts/insert.ejs'});
 });
 
+// 게시글 등록 (post)
+router.post('/insert', async function(req, res) {
+    const title=req.body.title;
+    const content=req.body.content;
+    const writer=req.body.writer;
+
+    var con;
+
+    try{
+        con = await getConnection();
+
+        var sql = "insert into posts(id, title, content, writer) values(post_id.nextval, :title, :content, :writer)";
+
+        con.execute(sql, {title, content, writer}, {autoCommit:true});
+        res.sendStatus(200);
+    }catch(err){
+        console.log(err);
+    }finally{
+        if(con) await con.close();
+    }
+});
+
 module.exports = router;

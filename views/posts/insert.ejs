@@ -25,8 +25,14 @@
             alert("게시글 내용을 입력하세요!");
             frm.content.focus();
         }else{
-        
-            // post 라우터 추가
+            $.ajax({
+                type: 'post',
+                url: '/posts/insert',
+                data: {title, content, writer:scode},
+                success:function(){
+                    location.href="/posts"
+                }
+            })
         }
     })
 </script>
