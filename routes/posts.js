@@ -64,4 +64,27 @@ router.post('/insert', async function(req, res) {
     }
 });
 
+// 게시글 정보 페이지 (get)
+router.get('/:id', async function(req, res) {
+    const id = req.params.id;
+
+    var con;
+
+    try{
+        con = await getConnection();
+
+        var sql = 'select * from view_posts where id=:id';
+
+        var result = await con.execute(sql, {id}, {outFormat:oracledb.OUT_FORMAT_OBJECT});
+
+        var post = result.rows[0];
+        
+        res.render('index', {title: '게시글 정보', pageName: 'posts/read.ejs', post});
+    }catch(err){
+        console.log(err);
+    }finally{
+        if(con) await con.close();
+    }
+})
+
 module.exports = router;
