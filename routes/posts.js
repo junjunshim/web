@@ -108,4 +108,27 @@ router.post('/delete', async function(req, res) {
     }
 })
 
+// 게시글 수정 페이지
+router.get('/update/:id', async function(req, res) {
+    const id = req.params.id;
+
+    var con;
+
+    try{
+        con = await getConnection();
+
+        var sql = 'select * from view_posts where id = :id';
+
+        var result = await con.execute(sql, {id}, {outFormat:oracledb.OUT_FORMAT_OBJECT});
+
+        var post = result.rows[0];
+
+        res.render('index', {title: '글수정', pageName: 'posts/update.ejs', post});
+    }catch(err){
+        console.log(err);
+    }finally{
+        if(con) await con.close();
+    }
+});
+
 module.exports = router;
