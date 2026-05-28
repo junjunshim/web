@@ -37,4 +37,9 @@ router.get('/list.json', async function(req, res){
     }
 });
 
+// 게시글 등록 페이지(get)
+router.get('/insert', function(req, res, next){
+    res.render('index', {title:'글쓰기', pageName:'posts/insert.ejs'});
+});
+
 module.exports = router;

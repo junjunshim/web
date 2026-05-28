@@ -14,7 +14,7 @@
             {{#each .}}
                 <tr>
                     <td>{{ID}}</td>
-                    <td><a href="#">{{TITLE}}</a></td>
+                    <td><a href="#">{{TITLE}}</a></td>  
                     <td>{{SNAME}}({{WRITER}})</td>
                     <td class="text-end">{{FMT_DATE}}</td>
                 </tr>
@@ -30,10 +30,10 @@
 
     $(".btn-insert").on("click", function(){
         if(scode) {
-            location.href='/posts'; //변경
+            location.href='/posts/insert';
         } 
         else {
-            sessionStorage.setItem("target", "/posts"); //변경
+            sessionStorage.setItem("target", "/posts/insert");
             location.href='/users/login';
         }
     });
