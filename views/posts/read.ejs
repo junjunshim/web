@@ -30,4 +30,17 @@
     }else{
         $(".btn-modify").hide();
     }
+
+    $(".btn-delete").on("click", function(){
+        if(confirm(`${id}번 게시글을 삭제하실래요?`)){
+            $.ajax({
+                type:"post",
+                url:"/posts/delete",
+                data:{id},
+                success:function(){
+                    location.href="/posts";
+                }
+            })
+        }
+    });
 </script>

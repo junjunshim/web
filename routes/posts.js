@@ -87,4 +87,25 @@ router.get('/:id', async function(req, res) {
     }
 })
 
+// 게시글 삭제 
+router.post('/delete', async function(req, res) {
+    const id = req.body.id;
+
+    var con;
+
+    try{
+        con = await getConnection();
+
+        var sql = 'delete from posts where id=:id';
+
+        await con.execute(sql, {id}, {autoCommit:true});
+
+        res.sendStatus(200);
+    }catch(err){
+        console.log(err);
+    }finally{
+        if(con) await con.close();
+    }
+})
+
 module.exports = router;
