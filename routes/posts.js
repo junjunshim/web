@@ -12,21 +12,27 @@ router.get('/', function (req, res, next) {
 router.get('/list.json', async function(req, res){
     const page=parseInt(req.query.page) || 1;
     const size=parseInt(req.query.size) || 10;
+    var word = req.query.word || "";
 
     const startRow = (page-1) * size + 1;
     const endRow = page * size;
-    
+    word = '%' + word + '%';
+
     var con;
     
     try{
         con = await getConnection();
         
-        var sql="select * from view_posts where rn between :startRow and :endRow";
-        var result=await con.execute(sql, {startRow, endRow}, {outFormat:oracledb.OUT_FORMAT_OBJECT});
+        var sql=
+            "select * from (select row_number() over(order by p.rn) as seq, p.* from view_posts p where p.title like :word or p.sname like :word) t where t.seq between :startrow and :endrow";
+
+        var result=await con.execute(sql, {word, word, startRow, endRow}, {outFormat:oracledb.OUT_FORMAT_OBJECT});
         const list=result.rows;
         
-        sql="select count(*) from view_posts";
-        result=await con.execute(sql);
+        sql=
+            "select count(*) from view_posts where title like :word or sname like :word";
+
+        result=await con.execute(sql, {word, word});
         const total=result.rows[0][0];
         
         res.send({list, total});
